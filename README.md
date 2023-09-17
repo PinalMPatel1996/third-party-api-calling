@@ -20,3 +20,5 @@
   ```shell
   php artisan db:seed
   ```
+- Set third party API urls into the .env file.
+- Call this [API](http://intervew-task.test/api/data) from postman to get data
