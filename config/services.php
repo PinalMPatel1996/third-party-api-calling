@@ -31,4 +31,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'random_user' => [
+        'api_url' => env('RANDOM_USER_API_URL')
+    ],
+
+    'bored_activity' => [
+        'api_url' => env('BORED_ACTIVITY_API_URL')
+    ],
+
 ];
