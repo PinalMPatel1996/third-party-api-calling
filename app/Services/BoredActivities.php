@@ -10,7 +10,7 @@ class BoredActivities
 {
     protected $limit;
 
-    public function __construct($limit=10)
+    public function __construct($limit = 10)
     {
         $this->limit = $limit;
     }
@@ -20,17 +20,17 @@ class BoredActivities
         $apiUrl = config('services.bored_activity.api_url');
         $activities = [];
 
-        for ($i=0; $i < $this->limit; $i++){
+        for ($i = 0; $i < $this->limit; $i++) {
 
             $activityResponse = (new HttpClient($apiUrl))->get();
             $activity = data_get($activityResponse, 'data');
 
-            if($activityResponse['status'] !== 200){
+            if ($activityResponse['status'] !== 200) {
                 return (new RandomUser($this->limit))->get();
             }
 
             $activities[] = [
-                'activity' => data_get($activity,'activity'),
+                'activity' => data_get($activity, 'activity'),
                 'key' => data_get($activity, 'key'),
                 'type' => data_get($activity, 'type')
             ];

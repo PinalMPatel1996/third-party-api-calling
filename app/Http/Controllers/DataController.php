@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\RandomUser;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class DataController extends Controller
 {
@@ -12,22 +12,18 @@ class DataController extends Controller
     {
         $limit = request()->limit ?? 10;
 
-        $data = (new RandomUser($limit))->get();
+        try {
+            \request()->validate([
+                'limit' => ['nullable', 'numeric', 'min:1', 'max:20']
+            ]);
+        } catch (ValidationException $exception) {
+            return response()->xml([
+                'data' => $exception->errors()
+            ], 422);
+        }
 
-        return $this->setResponse('Success', $data);
-    }
-
-    protected function setResponse($status, $content)
-    {
-        $data = [
-            'status' => $status,
-            'data' => $content
-        ];
-
-        if($status === "Error")
-            throw new HttpException(404, $content['ErrorMessage']);
-
-        return response()->xml($data);
-
+        return response()->xml([
+            'data' => (new RandomUser($limit))->get()
+        ]);
     }
 }
