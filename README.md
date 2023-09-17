@@ -7,7 +7,7 @@
   ```shell
   cp .env.example .env
   ```
-- Create a database with name `interview-task`
+- Create a database with name `intervew_task`
 - Do necessary change in `.env` file (optional)
 - Run following commands:
   ```shell
