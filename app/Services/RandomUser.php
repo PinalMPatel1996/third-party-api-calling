@@ -31,6 +31,7 @@ class RandomUser
             ];
         }
 
-        return $users;
+        return collect($users)->sortByDesc('full_name');
+
     }
 }

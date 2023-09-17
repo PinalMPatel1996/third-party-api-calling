@@ -29,6 +29,6 @@ class BoredActivities
             ];
         }
 
-        return $activities;
+        return collect($activities)->sortBy('type');
     }
 }
