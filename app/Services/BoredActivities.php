@@ -21,7 +21,14 @@ class BoredActivities
         $activities = [];
 
         for ($i=0; $i < $this->limit; $i++){
-            $activity = (new HttpClient($apiUrl))->get();
+
+            $activityResponse = (new HttpClient($apiUrl))->get();
+            $activity = data_get($activityResponse, 'data');
+
+            if($activityResponse['status'] !== 200){
+                return (new RandomUser($this->limit))->get();
+            }
+
             $activities[] = [
                 'activity' => data_get($activity,'activity'),
                 'key' => data_get($activity, 'key'),
@@ -29,6 +36,6 @@ class BoredActivities
             ];
         }
 
-        return collect($activities)->sortBy('type');
+        return collect($activities)->sortBy('type')->toArray();
     }
 }

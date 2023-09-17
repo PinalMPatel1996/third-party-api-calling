@@ -2,38 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\BoredActivities;
 use App\Services\RandomUser;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
 
 class DataController extends Controller
 {
     public function __invoke()
     {
-        $limit = request()->limit??10;
+        $limit = request()->limit ?? 10;
 
-        $users = (new RandomUser($limit))->get();
+        $data = (new RandomUser($limit))->get();
 
-        if(sizeof($users) < $limit){
-            $activities = (new BoredActivities($limit))->get();
-
-            if(sizeof($activities) < $limit){
-                $errorMessage = ['ErrorMessage'=> "Unable to fetch enough users data."];
-
-                return $this->setResponse('Error', $errorMessage);
-            }
-            return $this->setResponse('Success', $activities);
-        }else{
-            return $this->setResponse('Success', $users);
-        }
+        return $this->setResponse('Success', $data);
     }
 
-    protected function setResponse($status, $content){
+    protected function setResponse($status, $content)
+    {
         $data = [
             'status' => $status,
             'data' => $content
         ];
 
+        if($status === "Error")
+            throw new HttpException(404, $content['ErrorMessage']);
+
         return response()->xml($data);
+
     }
 }

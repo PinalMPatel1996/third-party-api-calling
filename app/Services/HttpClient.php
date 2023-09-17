@@ -21,10 +21,14 @@ class HttpClient
             $response = Http::get($this->apiEndPoint);
 
             if($response->ok()){
-                return $response->json($key = null, $default = []);
+                return [
+                    'data' => $response->json($key = null, $default = []),
+                    'status' => 200
+                ];
             }
         }catch (\Exception $exception){
-            return error_log($exception->getMessage());
+            error_log($exception->getMessage());
+            return ['data' => [], 'status' => $exception->getCode()];
         }
     }
 }
